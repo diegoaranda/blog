@@ -1,5 +1,8 @@
 class ArticlesController < ApplicationController
 	
+	before_action :authenticate_user!, except: [:show,:index]
+	before_action :set_article, except: [:index,:new,:create]
+	#before_action :validate_user, except: [:show, :index]
 	#Get /articles
 	def index
 		@articles = Article.all #Obtiene todos los registros de la BD
@@ -7,7 +10,9 @@ class ArticlesController < ApplicationController
 	
 	#GET /articles/id
 	def show
-		@article = Article.find(params[:id]) #Encontrar por un id
+		#@article = Article.find(params[:id]) #Encontrar por un id
+		@article.update_visits_count
+		@comment = Comment.new
 	end
 	
 	#GET articles/new
@@ -17,7 +22,7 @@ class ArticlesController < ApplicationController
 	
 	#POST articles
 	def create
-		@article = Article.new(article_params)
+		@article = current_user.articles.new(article_params)
 		
 		if @article.save
 			redirect_to @article
@@ -34,21 +39,29 @@ class ArticlesController < ApplicationController
 	end
 
 	def edit
-		@article = Article.find(params[:id])
+		
 	end
 
 	def update
-		@article = Article.find(params[:id])
-		if @article.update(article_params)
-			redirect_to @article
-		else
-			render :edit
-		end
+		# @article = Article.find(params[:id])
+		# if @article.update(article_params)
+		# 	redirect_to @article
+		# else
+		# 	render :edit
+		# end
 	end
 
 	private 
 
+	def set_article
+		@article = Article.find(params[:id])
+	end
+
+	def validate_user
+		redirect_to new_user_session_path, notice: "Necesitas iniciar sesion"
+	end
+
 	def article_params
-		params.require(:article).permit(:title,:body)
+		params.require(:article).permit(:title,:body,:cover)
 	end
 end

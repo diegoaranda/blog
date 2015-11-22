@@ -36,11 +36,11 @@ a,a:visited{
 .puntos{
 	list-style-type:none
 }
-.field{
+.field,.top-space,.actions{
 	margin-top: 1em;
 }
-.top-space{
-	margin-top: 1em;
+.text-left{
+	text-align: left;
 }
 .form-control{
 	border: none;
@@ -52,3 +52,4 @@ a,a:visited{
 	padding: 10px 0px;
 	font-size: 1.2em;
 }
+
