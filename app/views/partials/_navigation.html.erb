@@ -3,20 +3,19 @@
 		<ul class="no-list row center-xs middle-xs puntos">
 				
 				<li class="col-md">
-					<h1 class="no-margin" id="logo">Blog de Diego</h1>
+					<h1 class="no-margin" id="logo"><%=link_to "Blog de Diego", root_path%></h1>
 				</li>
 				<li class="col-md">
-					<%=link_to "Inicio", root_path%>
+					<%= link_to "Articulos", articles_path %>
 				</li>
-				<li class="col-md">
-					Diseno
-				</li>
-				<li class="col-md">
-					Programacion
-				</li>
-				<li class="col-md">
-					Tecnologia
-				</li>
+				
+				
+				<% @categories.each do |category|%>
+					<li class="col-md">
+						<%= category.name %>
+					</li>
+				<%end%>
+				
 				<li>
 					<% if user_signed_in? %>
 						<li class="col-md">
