@@ -2,6 +2,8 @@ class ArticlesController < ApplicationController
 	
 	before_action :authenticate_user!, except: [:show,:index]
 	before_action :set_article, except: [:index,:new,:create]
+	before_action :authenticate_editor!, only: [:new,:create,:update]
+	before_action :authenticate_admin!, only: [:destroy]
 	#before_action :validate_user, except: [:show, :index]
 	#Get /articles
 	def index
@@ -18,12 +20,13 @@ class ArticlesController < ApplicationController
 	#GET articles/new
 	def new
 		@article = Article.new
+		@categories = Category.all
 	end
 	
 	#POST articles
 	def create
 		@article = current_user.articles.new(article_params)
-		
+		@article.categories = params[:categories]
 		if @article.save
 			redirect_to @article
 		else
@@ -62,6 +65,6 @@ class ArticlesController < ApplicationController
 	end
 
 	def article_params
-		params.require(:article).permit(:title,:body,:cover)
+		params.require(:article).permit(:title,:body,:cover,:categories)
 	end
 end
